@@ -1,0 +1,86 @@
+<div>
+  <div *ngIf="showErrorList === true" class="error-list">
+    <p *ngFor="let error of errorList; let i = index">
+      {{ error }}
+    </p>
+  </div>
+
+  <form class="form-container" (submit)="updateUser()">
+    <div class="button-wrapper"><button type="submit">Add user ➕</button></div>
+    <div class="form-container__content">
+      <h3>Nombre</h3>
+      <input
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="user.nombre"
+        type="text"
+        minlength="3"
+        required
+      />
+      <h3>Apellidos</h3>
+      <input
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="user.apellidos"
+        minlength="3"
+        type="text"
+        required
+      />
+      <h3>Edad</h3>
+      <input
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="user.edad"
+        type="number"
+        required
+      />
+      <h3>DNI</h3>
+      <input
+        minlength="9"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="user.dni"
+        type="text"
+        required
+      />
+      <h3>Cumpleaños</h3>
+      <input
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="user.cumpleanos"
+        required
+        type="date"
+      />
+      <h3>Color Favorito</h3>
+      <input
+        minlength="9"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="user.colorFavorito"
+        type="text"
+      />
+      <h3>Genero</h3>
+      <select
+        class="form-control"
+        id="college"
+        [(ngModel)]="user.sexo"
+        name="college_name"
+        required
+      >
+        <option value="" default>Seleccione</option>
+        <option value="Hombre">hombre</option>
+        <option value="Mujer">mujer</option>
+        <option value="Otro">otro</option>
+        <option value="NoEspecifica">No especificado</option>
+      </select>
+    </div>
+  </form>
+
+  <h3>USER LIST</h3>
+  <ul>
+    <li class="user-list__user" *ngFor="let user of userList; let i = index">
+      {{ i }}
+      <p>{{ user.nombre }} {{ user.apellidos }}</p>
+      <p>Género: {{ user.sexo }}</p>
+      <p>Edad: {{ user.edad }}</p>
+      <p>DNI: {{ user.dni }}</p>
+      <p>Cumpleaños: {{ user.cumpleanos }}</p>
+      <button (click)="editUser(i)">Edit user</button>
+      <button (click)="removeUser(i)">❌</button>
+    </li>
+  </ul>
+</div>
