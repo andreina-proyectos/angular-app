@@ -6,7 +6,14 @@
   </div>
 
   <form class="form-container" (submit)="updateUser()">
-    <div class="button-wrapper"><button type="submit">Add user ➕</button></div>
+    <div *ngIf="formAction !== 'updateUser'" class="button-wrapper">
+      <button type="submit">Add user ➕</button>
+    </div>
+
+    <div *ngIf="formAction === 'updateUser'" class="button-wrapper">
+      <button type="submit">Update user ➕</button>
+    </div>
+
     <div class="form-container__content">
       <h3>Nombre</h3>
       <input
@@ -79,6 +86,7 @@
       <p>Edad: {{ user.edad }}</p>
       <p>DNI: {{ user.dni }}</p>
       <p>Cumpleaños: {{ user.cumpleanos }}</p>
+
       <button (click)="editUser(i)">Edit user</button>
       <button (click)="removeUser(i)">❌</button>
     </li>

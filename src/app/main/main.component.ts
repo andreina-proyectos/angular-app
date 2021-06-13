@@ -10,9 +10,9 @@ import { Observable, throwError } from 'rxjs'
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  cleanForm = (): User => {
+  resetUser = (): User => {
     return {
-      id: '',
+      _id: '',
       nombre: '',
       apellidos: '',
       edad: null,
@@ -23,7 +23,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  user: User = this.cleanForm()
+  user: User = this.resetUser()
   userList: User[] = []
 
   formAction = 'addUser'
@@ -37,27 +37,58 @@ export class MainComponent implements OnInit {
     }
 
     if (this.formAction === 'addUser') {
-      // this.userList.push(this.user)
-
-      this.user = this.cleanForm()
+      this.http.post<any>('http://localhost:5000/user', this.user).subscribe(
+        (user) => {
+          this.userList.push({ ...user.userData })
+          this.user = this.resetUser()
+          this.restartToInitialValues()
+        },
+        (error) => this.handleError(error),
+      )
     } else if (this.formAction === 'updateUser') {
-      this.userList[this.userPosition] = this.user
+      // this.userList[this.userPosition] = this.user
+      this.http
+        .put<any>(`http://localhost:5000/user/${this.user._id}`, this.user)
+        .subscribe(
+          (userUpdated) => {
+            this.userList[this.userPosition] = userUpdated.userData
+            this.userList = [...this.userList]
+            this.user = this.resetUser()
+            this.restartToInitialValues()
+          },
+          (error) => this.handleError(error),
+        )
     }
-    this.restartToInitialValues()
   }
 
   editUser = (index: number): void => {
-    this.user = this.userList[index]
+    const selectedUser = this.userList[index]
+    this.user = { ...selectedUser }
     this.formAction = 'updateUser'
     this.userPosition = index
   }
 
   removeUser = (index: number): void => {
-    this.userList.splice(index, 1)
+    const selectedUser = this.userList[index]
+    this.user = { ...selectedUser }
+    this.userPosition = index
+
+    this.http.delete(`http://localhost:5000/user/${this.user._id}`).subscribe(
+      () => {
+        console.log('Borrado ok')
+        this.userList.splice(this.userPosition, 1)
+        this.userList = [...this.userList]
+        this.restartToInitialValues()
+      },
+      (error) => {
+        console.error(error)
+        alert('Error al borrar user')
+      },
+    )
   }
 
   restartToInitialValues = () => {
-    this.user = this.cleanForm()
+    this.user = this.resetUser()
     this.formAction = 'addUser'
     this.userPosition = null
     this.showErrorList = false
@@ -157,8 +188,6 @@ export class MainComponent implements OnInit {
     this.http
       .get(`http://localhost:5000/users`)
       .subscribe((usersData: User[]) => {
-        console.log('usersData --->', usersData)
-        console.log('usersData --->', typeof usersData)
         this.userList = usersData
       })
   }
