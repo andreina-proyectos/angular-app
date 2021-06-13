@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { GenderOptions, User } from '../models/user';
+import { Component, OnInit } from '@angular/core'
+import { GenderOptions, User } from '../models/user'
 
 @Component({
   selector: 'app-main',
@@ -16,91 +16,120 @@ export class MainComponent implements OnInit {
       cumpleanos: new Date(),
       colorFavorito: '',
       sexo: null,
-    };
-  };
+    }
+  }
 
-  user: User = this.cleanForm();
-  userList: Array<User> = [];
+  user: User = this.cleanForm()
+  userList: Array<User> = []
 
-  formAction = 'addUser';
-  userPosition = 0;
-  errorList: String[] = [];
-  showErrorList: Boolean = false;
+  formAction = 'addUser'
+  userPosition = 0
+  errorList: String[] = []
+  showErrorList: Boolean = false
 
   updateUser = (): void => {
     if (!this.isFormValid()) {
-      return;
+      return
     }
 
     if (this.formAction === 'addUser') {
-      this.userList.push(this.user);
-      this.user = this.cleanForm();
+      this.userList.push(this.user)
+      this.user = this.cleanForm()
     } else if (this.formAction === 'updateUser') {
-      this.userList[this.userPosition] = this.user;
+      this.userList[this.userPosition] = this.user
     }
-    this.restartToInitialValues();
-  };
+    this.restartToInitialValues()
+  }
 
   editUser = (index: number): void => {
-    this.user = this.userList[index];
-    this.formAction = 'updateUser';
-    this.userPosition = index;
-  };
+    this.user = this.userList[index]
+    this.formAction = 'updateUser'
+    this.userPosition = index
+  }
 
   removeUser = (index: number): void => {
-    this.userList.splice(index, 1);
-  };
+    this.userList.splice(index, 1)
+  }
 
   restartToInitialValues = () => {
-    this.user = this.cleanForm();
-    this.formAction = 'addUser';
-    this.userPosition = null;
-    this.showErrorList = false;
-  };
+    this.user = this.cleanForm()
+    this.formAction = 'addUser'
+    this.userPosition = null
+    this.showErrorList = false
+  }
 
   isFormValid = (): Boolean => {
-    this.errorList = [];
-    this.showErrorList = false;
+    this.errorList = []
+    this.showErrorList = false
 
-    const { nombre, apellidos, edad, dni, cumpleanos, colorFavorito, sexo } =
-      this.user;
+    const {
+      nombre,
+      apellidos,
+      edad,
+      dni,
+      cumpleanos,
+      colorFavorito,
+      sexo,
+    } = this.user
 
     if (!nombre) {
-      this.errorList.push('⚠ The field nombre must be present');
+      this.errorList.push('⚠ The field nombre must be present')
+    }
+    if (nombre && this.hasNumber(nombre)) {
+      this.errorList.push(
+        '⚠ The field nombre must not contains numeric elements',
+      )
+    }
+    if (nombre && nombre.length <= 3) {
+      this.errorList.push(
+        '⚠ The field nombre must contains at least 3 characters',
+      )
     }
     if (!apellidos) {
-      this.errorList.push('⚠ The field apellidos must be present');
+      this.errorList.push('⚠ The field apellidos must be present')
+    }
+    if (apellidos && this.hasNumber(apellidos)) {
+      this.errorList.push(
+        '⚠ The field apellidos must not contains numeric elements',
+      )
+    }
+    if (apellidos && apellidos.length <= 3) {
+      this.errorList.push(
+        '⚠ The field apellidos must contains at least 3 characters',
+      )
     }
     if (!edad) {
-      this.errorList.push('⚠ The field edad must be present');
+      this.errorList.push('⚠ The field edad must be present')
     }
     if (!dni) {
-      this.errorList.push('⚠ The field dni must be present');
+      this.errorList.push('⚠ The field dni must be present')
     }
     if (!cumpleanos) {
-      this.errorList.push('⚠ The field cumpleanos must be present');
+      this.errorList.push('⚠ The field cumpleanos must be present')
     }
     if (edad < 0 || edad > 125) {
-      this.errorList.push(
-        '⚠ Your age must be greater than 0 and less than 125'
-      );
+      this.errorList.push('⚠ Your age must be greater than 0 and less than 125')
     }
     if (dni.length != 9) {
-      this.errorList.push('⚠ Your DNI must have 9 char');
+      this.errorList.push('⚠ Your DNI must have 9 characters')
     }
 
     if (!sexo) {
-      this.errorList.push('⚠ Your gender must have a selected option');
+      this.errorList.push('⚠ Your gender must have a selected option')
     }
-    console.log(sexo);
+    console.log(sexo)
 
     if (this.errorList.length != 0) {
-      this.showErrorList = true;
-      return false;
+      this.showErrorList = true
+      return false
     } else {
-      return true;
+      return true
     }
-  };
+  }
+
+  hasNumber = (myString) => {
+    return /\d+/.test(myString)
+  }
 
   constructor() {}
 
