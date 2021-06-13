@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { GenderOptions, User } from '../models/user'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { catchError, retry } from 'rxjs/operators'
+import { Observable, throwError } from 'rxjs'
 
 @Component({
   selector: 'app-main',
@@ -9,6 +12,7 @@ import { GenderOptions, User } from '../models/user'
 export class MainComponent implements OnInit {
   cleanForm = (): User => {
     return {
+      id: '',
       nombre: '',
       apellidos: '',
       edad: null,
@@ -20,7 +24,7 @@ export class MainComponent implements OnInit {
   }
 
   user: User = this.cleanForm()
-  userList: Array<User> = []
+  userList: User[] = []
 
   formAction = 'addUser'
   userPosition = 0
@@ -33,7 +37,8 @@ export class MainComponent implements OnInit {
     }
 
     if (this.formAction === 'addUser') {
-      this.userList.push(this.user)
+      // this.userList.push(this.user)
+
       this.user = this.cleanForm()
     } else if (this.formAction === 'updateUser') {
       this.userList[this.userPosition] = this.user
@@ -131,7 +136,30 @@ export class MainComponent implements OnInit {
     return /\d+/.test(myString)
   }
 
-  constructor() {}
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error)
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, ` + `body was: ${error.error}`,
+      )
+    }
+    // Return an observable with a user-facing error message.
+    return throwError('Something bad happened; please try again later.')
+  }
 
-  ngOnInit(): void {}
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.http
+      .get(`http://localhost:5000/users`)
+      .subscribe((usersData: User[]) => {
+        console.log('usersData --->', usersData)
+        console.log('usersData --->', typeof usersData)
+        this.userList = usersData
+      })
+  }
 }
