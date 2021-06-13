@@ -17,37 +17,46 @@
     <div class="form-container__content">
       <h3>Nombre</h3>
       <input
+        class="form__input"
         [ngModelOptions]="{ standalone: true }"
         [(ngModel)]="user.nombre"
         type="text"
         minlength="3"
         required
+        placeholder="Nombre"
       />
       <h3>Apellidos</h3>
       <input
+        class="form__input"
         [ngModelOptions]="{ standalone: true }"
         [(ngModel)]="user.apellidos"
         minlength="3"
         type="text"
         required
+        placeholder="Apellidos"
       />
       <h3>Edad</h3>
       <input
+        class="form__input"
         [ngModelOptions]="{ standalone: true }"
         [(ngModel)]="user.edad"
         type="number"
         required
+        placeholder="Edad"
       />
       <h3>DNI</h3>
       <input
+        class="form__input"
         minlength="9"
         [ngModelOptions]="{ standalone: true }"
         [(ngModel)]="user.dni"
         type="text"
         required
+        placeholder="DNI"
       />
       <h3>Cumpleaños</h3>
       <input
+        class="form__input"
         [ngModelOptions]="{ standalone: true }"
         [(ngModel)]="user.cumpleanos"
         required
@@ -55,18 +64,21 @@
       />
       <h3>Color Favorito</h3>
       <input
+        class="form__input"
         minlength="9"
         [ngModelOptions]="{ standalone: true }"
         [(ngModel)]="user.colorFavorito"
         type="text"
+        placeholder="Color Favorito"
       />
       <h3>Genero</h3>
       <select
-        class="form-control"
+        class="form-control form__input-gen"
         id="college"
         [(ngModel)]="user.sexo"
         name="college_name"
         required
+        placeholder="Genero"
       >
         <option value="" default>Seleccione</option>
         <option value="Hombre">hombre</option>
