@@ -92,12 +92,12 @@
   <h3>USER LIST</h3>
   <ul>
     <li class="user-list__user" *ngFor="let user of userList; let i = index">
-      {{ i }}
-      <p>{{ user.nombre }} {{ user.apellidos }}</p>
-      <p>Género: {{ user.sexo }}</p>
-      <p>Edad: {{ user.edad }}</p>
-      <p>DNI: {{ user.dni }}</p>
-      <p>Cumpleaños: {{ user.cumpleanos }}</p>
+      <div>{{ i }}</div>
+      <div>{{ user.nombre }} {{ user.apellidos }}</div>
+      <div>Género: {{ user.sexo }}</div>
+      <div>Edad: {{ user.edad }}</div>
+      <div>DNI: {{ user.dni }}</div>
+      <div>Cumpleaños: {{ user.cumpleanos }}</div>
 
       <button (click)="editUser(i)">Edit user</button>
       <button (click)="removeUser(i)">❌</button>
